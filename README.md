@@ -1,4 +1,4 @@
-##Hadoop
+## Hadoop
 
 ### Running m/r under local mode
 ```bash
