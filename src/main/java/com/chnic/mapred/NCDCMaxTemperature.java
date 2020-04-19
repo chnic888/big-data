@@ -57,7 +57,6 @@ public class NCDCMaxTemperature extends Configured implements Tool {
 
     static class MapClass extends MapReduceBase implements Mapper<LongWritable, Text, IntWritable, FloatWritable> {
 
-
         @Override
         public void map(LongWritable key, Text value, OutputCollector<IntWritable, FloatWritable> outputCollector, Reporter reporter) throws IOException {
             try {
@@ -95,9 +94,8 @@ public class NCDCMaxTemperature extends Configured implements Tool {
 
         FileInputFormat.setInputPaths(jobConf, new Path(strings[0]));
         FileOutputFormat.setOutputPath(jobConf, new Path(strings[1]));
-
-        JobClient.runJob(jobConf);
-        return 0;
+        
+        return JobClient.runJob(jobConf).isSuccessful() ? 0 : 1;
     }
 
     public static void main(String[] args) throws Exception {

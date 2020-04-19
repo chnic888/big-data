@@ -3,10 +3,7 @@ package com.chnic.mapred;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.FloatWritable;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.*;
 import org.apache.hadoop.io.compress.GzipCodec;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.Tool;
@@ -14,12 +11,11 @@ import org.apache.hadoop.util.ToolRunner;
 
 import java.io.IOException;
 import java.util.AbstractMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class NCDCMaxTemperatureCompression extends Configured implements Tool {
+public class NCDCFileConverter extends Configured implements Tool {
 
     enum ValidateResult {
         MISSING,
@@ -55,9 +51,7 @@ public class NCDCMaxTemperatureCompression extends Configured implements Tool {
         }
     }
 
-
     static class MapClass extends MapReduceBase implements Mapper<LongWritable, Text, IntWritable, FloatWritable> {
-
 
         @Override
         public void map(LongWritable key, Text value, OutputCollector<IntWritable, FloatWritable> outputCollector, Reporter reporter) throws IOException {
@@ -70,41 +64,29 @@ public class NCDCMaxTemperatureCompression extends Configured implements Tool {
         }
     }
 
-    static class ReduceClass extends MapReduceBase implements Reducer<IntWritable, FloatWritable, IntWritable, FloatWritable> {
-
-        @Override
-        public void reduce(IntWritable key, Iterator<FloatWritable> valueIterator, OutputCollector<IntWritable, FloatWritable> outputCollector, Reporter reporter) throws IOException {
-            float maxValue = Float.MIN_VALUE;
-            while (valueIterator.hasNext()) {
-                maxValue = Math.max(maxValue, valueIterator.next().get());
-            }
-            outputCollector.collect(key, new FloatWritable(maxValue));
-        }
-    }
-
     @Override
     public int run(String[] strings) throws Exception {
-        JobConf jobConf = new JobConf(getConf(), NCDCMaxTemperatureCompression.class);
-        jobConf.setJobName("Compute Max Temperature and Output Gzip Files");
+        JobConf jobConf = new JobConf(getConf(), NCDCFileConverter.class);
 
         jobConf.setOutputKeyClass(IntWritable.class);
         jobConf.setOutputValueClass(FloatWritable.class);
 
         jobConf.setMapperClass(MapClass.class);
-        jobConf.setCombinerClass(ReduceClass.class);
-        jobConf.setReducerClass(ReduceClass.class);
+        jobConf.setNumReduceTasks(0);
+
+        jobConf.setOutputFormat(SequenceFileOutputFormat.class);
+        SequenceFileOutputFormat.setCompressOutput(jobConf, true);
+        SequenceFileOutputFormat.setOutputCompressorClass(jobConf, GzipCodec.class);
+        SequenceFileOutputFormat.setOutputCompressionType(jobConf, SequenceFile.CompressionType.BLOCK);
 
         FileInputFormat.setInputPaths(jobConf, new Path(strings[0]));
-        FileOutputFormat.setOutputPath(jobConf, new Path(strings[1]));
-
-        FileOutputFormat.setCompressOutput(jobConf, true);
-        FileOutputFormat.setOutputCompressorClass(jobConf, GzipCodec.class);
+        SequenceFileOutputFormat.setOutputPath(jobConf, new Path(strings[1]));
 
         return JobClient.runJob(jobConf).isSuccessful() ? 0 : 1;
     }
 
     public static void main(String[] args) throws Exception {
-        int result = ToolRunner.run(new Configuration(), new NCDCMaxTemperatureCompression(), args);
+        int result = ToolRunner.run(new Configuration(), new NCDCFileConverter(), args);
         System.exit(result);
     }
 }
