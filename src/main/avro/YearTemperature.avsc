@@ -1,0 +1,16 @@
+{
+  "type": "record",
+  "namespace": "com.chnic.avro",
+  "name": "YearTemperature",
+  "doc": "Year Temperature Pair",
+  "fields": [
+    {
+      "name": "year",
+      "type": "int"
+    },
+    {
+      "name": "temperature",
+      "type": "float"
+    }
+  ]
+}
