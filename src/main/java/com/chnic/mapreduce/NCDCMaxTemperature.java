@@ -21,6 +21,7 @@ import java.util.Map;
 public class NCDCMaxTemperature extends Configured implements Tool {
 
     static class MapClass extends Mapper<LongWritable, Text, IntWritable, FloatWritable> {
+
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             try {
@@ -37,6 +38,7 @@ public class NCDCMaxTemperature extends Configured implements Tool {
         @Override
         protected void reduce(IntWritable key, Iterable<FloatWritable> values, Context context) throws IOException, InterruptedException {
             float maxValue = Float.MIN_VALUE;
+
             for (FloatWritable value : values) {
                 maxValue = Math.max(maxValue, value.get());
             }
@@ -47,7 +49,8 @@ public class NCDCMaxTemperature extends Configured implements Tool {
     @Override
     public int run(String[] strings) throws Exception {
         Job job = Job.getInstance(getConf(), "Compute Max Temperature");
-
+        job.setJarByClass(NCDCMaxTemperature.class);
+        
         job.setOutputKeyClass(IntWritable.class);
         job.setOutputValueClass(FloatWritable.class);
 
