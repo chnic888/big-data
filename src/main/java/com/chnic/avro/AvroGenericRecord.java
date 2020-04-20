@@ -1,17 +1,16 @@
 package com.chnic.avro;
 
-import org.apache.hadoop.shaded.org.apache.avro.Schema;
-import org.apache.hadoop.shaded.org.apache.avro.generic.GenericData;
-import org.apache.hadoop.shaded.org.apache.avro.generic.GenericDatumReader;
-import org.apache.hadoop.shaded.org.apache.avro.generic.GenericDatumWriter;
-import org.apache.hadoop.shaded.org.apache.avro.generic.GenericRecord;
-import org.apache.hadoop.shaded.org.apache.avro.io.*;
+import org.apache.avro.Schema;
+import org.apache.avro.generic.GenericData;
+import org.apache.avro.generic.GenericDatumReader;
+import org.apache.avro.generic.GenericDatumWriter;
+import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.io.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class AvroGenericRecord {
-
 
     public byte[] createGenerateRecord() throws IOException {
         Schema schema = new Schema.Parser().parse(getClass().getClassLoader().getResourceAsStream("YearTemperature.avsc"));
@@ -30,19 +29,10 @@ public class AvroGenericRecord {
         return byteArrayOutputStream.toByteArray();
     }
 
-    public void readGenericRecord(byte[] bytes) throws IOException {
+    public GenericRecord readGenericRecord(byte[] bytes) throws IOException {
         Schema schema = new Schema.Parser().parse(getClass().getClassLoader().getResourceAsStream("YearTemperature.avsc"));
         DatumReader<GenericRecord> reader = new GenericDatumReader<>(schema);
         BinaryDecoder decoder = DecoderFactory.get().binaryDecoder(bytes, null);
-        GenericRecord genericRecord = reader.read(null, decoder);
-
-        System.out.println(genericRecord.getSchema().toString());
-        System.out.println(genericRecord.get("year"));
-        System.out.println(genericRecord.get("temperature"));
-    }
-
-    public static void main(String[] args) throws IOException {
-        AvroGenericRecord record = new AvroGenericRecord();
-        record.readGenericRecord(record.createGenerateRecord());
+        return reader.read(null, decoder);
     }
 }
