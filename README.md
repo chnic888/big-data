@@ -20,4 +20,7 @@ hadoop jar ./build/libs/ncdc-1.0.jar com.chnic.mapreduce.NCDCMaxTemperatureSorte
 ```bash
 #generate java file from avsc 
 ./gradlew clean generateAvroJava
+
+#run avro test case only 
+./gradlew clean test --tests com.chnic.avro.*
 ```
