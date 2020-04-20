@@ -13,6 +13,10 @@ public class YearTemperatureWritable implements WritableComparable<YearTemperatu
 
     private float temperature;
 
+    public YearTemperatureWritable() {
+
+    }
+
     public YearTemperatureWritable(int year, float temperature) {
         this.year = year;
         this.temperature = temperature;

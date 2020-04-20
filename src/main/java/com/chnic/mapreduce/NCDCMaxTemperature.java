@@ -50,13 +50,13 @@ public class NCDCMaxTemperature extends Configured implements Tool {
     public int run(String[] strings) throws Exception {
         Job job = Job.getInstance(getConf(), "Compute Max Temperature");
         job.setJarByClass(NCDCMaxTemperature.class);
-        
-        job.setOutputKeyClass(IntWritable.class);
-        job.setOutputValueClass(FloatWritable.class);
 
         job.setMapperClass(MapClass.class);
         job.setCombinerClass(ReduceClass.class);
         job.setReducerClass(ReduceClass.class);
+
+        job.setOutputKeyClass(IntWritable.class);
+        job.setOutputValueClass(FloatWritable.class);
 
         FileInputFormat.setInputPaths(job, new Path(strings[0]));
         FileOutputFormat.setOutputPath(job, new Path(strings[1]));
