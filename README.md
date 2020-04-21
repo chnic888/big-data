@@ -30,11 +30,14 @@ hadoop jar ./build/libs/ncdc-1.0.jar com.chnic.mapreduce.NCDCMaxTemperatureSorte
 #build jar file
 ./gradlew clean build
 
+#export config file dir
+export HADOOP_CONF_DIR=./src/main/resources/local
+
 #export LIBJARS
 export LIBJARS=./build/libs/avro-mapred-1.7.7-hadoop2.jar
 
 #export HADOOP_CLASSPATH
-export HADOOP_CLASSPATH=./build/libs/avro-mapred-1.7.7-hadoop2.jar
+export HADOOP_CLASSPATH=`echo ${LIBJARS} | sed s/,/:/g`
 
 #run m/r
 hadoop jar ./build/libs/ncdc-1.0.jar com.chnic.mapreduce.NCDCAvroMaxTemperature -libjars ${LIBJARS} './src/test/resources/190*.gz' ./out
