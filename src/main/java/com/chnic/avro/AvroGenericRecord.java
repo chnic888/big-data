@@ -12,12 +12,12 @@ import java.io.IOException;
 
 public class AvroGenericRecord {
 
-    public byte[] createGenerateRecord() throws IOException {
+    public byte[] createGenericRecord(int year, float temperature) throws IOException {
         Schema schema = new Schema.Parser().parse(getClass().getClassLoader().getResourceAsStream("YearTemperature.avsc"));
 
         GenericRecord genericRecord = new GenericData.Record(schema);
-        genericRecord.put("year", 2020);
-        genericRecord.put("temperature", (float) 38.1);
+        genericRecord.put("year", year);
+        genericRecord.put("temperature", temperature);
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         DatumWriter<GenericRecord> writer = new GenericDatumWriter<>(schema);

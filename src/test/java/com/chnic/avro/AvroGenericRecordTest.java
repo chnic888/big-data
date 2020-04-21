@@ -20,10 +20,13 @@ public class AvroGenericRecordTest {
 
     @Test
     public void testAvroGenericRecord() throws IOException {
-        GenericRecord genericRecord = record.readGenericRecord(record.createGenerateRecord());
+        int year = 2020;
+        float temperature = (float) 38.1;
+
+        GenericRecord genericRecord = record.readGenericRecord(record.createGenericRecord(year, temperature));
         assertNotNull(genericRecord);
-        assertEquals(2020, Integer.parseInt(genericRecord.get("year").toString()));
-        assertEquals(new Float(38.1), Float.parseFloat(genericRecord.get("temperature").toString()));
+        assertEquals(year, Integer.parseInt(genericRecord.get("year").toString()));
+        assertEquals(temperature, Float.parseFloat(genericRecord.get("temperature").toString()));
         assertEquals("com.chnic.avro.YearTemperature", genericRecord.getSchema().getFullName());
     }
 }
