@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'idea'
-    id "com.commercehub.gradle.plugin.avro" version "0.9.1"
+    id "com.commercehub.gradle.plugin.avro" version "0.8.1"
 }
 
 group 'com.chnic'
@@ -25,10 +25,18 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    userDependencies
+    userDependencies.transitive = false
+}
+
 dependencies {
     implementation 'org.apache.hadoop:hadoop-client-api:3.2.1'
     implementation 'org.apache.hadoop:hadoop-client-runtime:3.2.1'
-    implementation 'org.apache.avro:avro:1.9.2'
+    implementation 'org.apache.avro:avro:1.7.7'
+
+    userDependencies 'org.apache.avro:avro-mapred:1.7.7:hadoop2'
+    implementation configurations.userDependencies
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.1'
@@ -36,4 +44,13 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+task copyUserDependencies(type: Copy) {
+    from configurations.userDependencies
+    into "$buildDir/libs"
+}
+
+build {
+    finalizedBy copyUserDependencies
 }
