@@ -45,12 +45,7 @@ public class NCDCAvroMaxTemperature extends Configured implements Tool {
     }
 
     static class ReduceClass extends Reducer<AvroKey<Integer>, AvroValue<YearTemperature>, AvroKey<YearTemperature>, NullWritable> {
-
-        @Override
-        protected void setup(Context context) throws IOException, InterruptedException {
-            super.setup(context);
-        }
-
+        
         @Override
         protected void reduce(AvroKey<Integer> key, Iterable<AvroValue<YearTemperature>> values, Context context) throws IOException, InterruptedException {
             float maxValue = Float.MIN_VALUE;
