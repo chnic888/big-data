@@ -42,3 +42,8 @@ export HADOOP_CLASSPATH=`echo ${LIBJARS} | sed s/,/:/g`
 #run m/r
 hadoop jar ./build/libs/ncdc-1.0.jar com.chnic.mapreduce.NCDCAvroMaxTemperature -libjars ${LIBJARS} './src/test/resources/190*.gz' ./out
 ```
+
+### Running Parquet sample locally
+```bash
+./gradlew clean test --tests com.chnic.parquet.*
+```

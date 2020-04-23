@@ -15,11 +15,9 @@ import org.apache.parquet.schema.MessageTypeParser;
 import java.io.IOException;
 import java.util.*;
 
-import static org.apache.parquet.hadoop.example.GroupWriteSupport.PARQUET_EXAMPLE_SCHEMA;
-
 public class ParquetSerializedFile {
 
-    private MessageType schema = MessageTypeParser.parseMessageType(
+    private final MessageType schema = MessageTypeParser.parseMessageType(
             "message YearTemperature{\n" +
                     "required int32 year;\n" +
                     "required float temperature;\n" +
@@ -28,11 +26,11 @@ public class ParquetSerializedFile {
 
     public void serializeFile(String filePath, Map<Integer, Float> parameterMap) throws IOException {
         SimpleGroupFactory simpleGroupFactory = new SimpleGroupFactory(schema);
-        GroupWriteSupport.setSchema(schema, new Configuration());
-
         ParquetWriterBuilder parquetWriterBuilder = new ParquetWriterBuilder(new Path(filePath));
+
         Configuration configuration = new Configuration();
-        configuration.set(PARQUET_EXAMPLE_SCHEMA, schema.toString());
+        GroupWriteSupport.setSchema(schema, configuration);
+
         parquetWriterBuilder.withConf(configuration);
         ParquetWriter<Group> parquetWriter = parquetWriterBuilder.build();
 
