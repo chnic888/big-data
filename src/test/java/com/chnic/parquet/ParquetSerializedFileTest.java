@@ -1,6 +1,5 @@
-package com.chnic.avro;
+package com.chnic.parquet;
 
-import org.apache.avro.generic.GenericRecord;
 import org.junit.jupiter.api.*;
 
 import java.io.File;
@@ -9,13 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AvroSerializedFileTest {
+public class ParquetSerializedFileTest {
 
-    private AvroSerializedFile avroSerializedFile;
+    private ParquetSerializedFile parquetSerializedFile;
 
     private static Map<Integer, Float> parameterMap;
 
@@ -29,14 +27,14 @@ public class AvroSerializedFileTest {
 
     @BeforeEach
     public void setup() {
-        avroSerializedFile = new AvroSerializedFile();
+        parquetSerializedFile = new ParquetSerializedFile();
     }
 
     @Test
     @Order(1)
     public void testSerializedFile() throws IOException {
-        String filePath = AvroSerializedFileTest.class.getResource("").getPath() + "data.avro";
-        avroSerializedFile.serializeFile(filePath, parameterMap);
+        String filePath = ParquetSerializedFileTest.class.getResource("").getPath() + "data.parquet";
+        parquetSerializedFile.serializeFile(filePath, parameterMap);
 
         assertTrue(new File(filePath).exists());
     }
@@ -44,9 +42,11 @@ public class AvroSerializedFileTest {
     @Test
     @Order(2)
     public void testDeserializedFile() throws IOException {
-        String filePath = AvroSerializedFileTest.class.getResource("").getPath() + "data.avro";
-        List<GenericRecord> recordList = avroSerializedFile.deserializeFile(filePath);
+        String filePath = ParquetSerializedFileTest.class.getResource("").getPath() + "data.parquet";
+        List<Map.Entry<Integer, Float>> list = parquetSerializedFile.deserializeFile(filePath);
 
-        assertEquals(parameterMap.size(), recordList.size());
+        assertNotNull(list);
+        assertEquals(parameterMap.size(), list.size());
+        list.forEach(v -> assertEquals(parameterMap.get(v.getKey()), v.getValue()));
     }
 }

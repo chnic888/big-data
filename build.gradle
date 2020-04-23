@@ -36,6 +36,7 @@ dependencies {
     implementation 'org.apache.avro:avro:1.7.7'
 
     userDependencies 'org.apache.avro:avro-mapred:1.7.7:hadoop2'
+    userDependencies 'org.apache.parquet:parquet-avro:1.11.0'
     implementation configurations.userDependencies
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.1'

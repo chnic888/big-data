@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class AvroSerializedFile {
 
-    public void serializedFile(String filePath, Map<Integer, Float> parameterMap) throws IOException {
+    public void serializeFile(String filePath, Map<Integer, Float> parameterMap) throws IOException {
         Schema schema = new Schema.Parser().parse(getClass().getClassLoader().getResourceAsStream("YearTemperature.avsc"));
         DatumWriter<GenericRecord> writer = new GenericDatumWriter<>(schema);
         DataFileWriter<GenericRecord> dataFileWriter = new DataFileWriter<>(writer);
@@ -37,7 +37,7 @@ public class AvroSerializedFile {
         dataFileWriter.close();
     }
 
-    public List<GenericRecord> deserializedFile(String filePath) throws IOException {
+    public List<GenericRecord> deserializeFile(String filePath) throws IOException {
         GenericDatumReader<GenericRecord> reader = new GenericDatumReader<>();
         DataFileReader<GenericRecord> dataFileReader = new DataFileReader<>(new File(filePath), reader);
         List<GenericRecord> recordList = new ArrayList<>();
