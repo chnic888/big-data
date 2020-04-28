@@ -47,3 +47,13 @@ hadoop jar ./build/libs/ncdc-1.0.jar com.chnic.mapreduce.NCDCAvroMaxTemperature 
 ```bash
 ./gradlew clean test --tests com.chnic.parquet.*
 ```
+
+#### Running Spark sample locally
+```bash
+#build jar file
+./gradlew clean build
+
+#run spark
+spark-submit --class com.chnic.spark.NCDCMaxTemperature --master local ./build/libs/ncdc-1.0.jar ./src/test/resources/1901 ./out
+```
+
