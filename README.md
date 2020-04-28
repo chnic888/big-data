@@ -25,7 +25,7 @@ hadoop jar ./build/libs/ncdc-1.0.jar com.chnic.mapreduce.NCDCMaxTemperatureSorte
 ./gradlew clean test --tests com.chnic.avro.*
 ```
 
-#### Running Avro m/r sample locally
+### Running Avro m/r sample locally
 ```bash
 #build jar file
 ./gradlew clean build
@@ -48,7 +48,7 @@ hadoop jar ./build/libs/ncdc-1.0.jar com.chnic.mapreduce.NCDCAvroMaxTemperature 
 ./gradlew clean test --tests com.chnic.parquet.*
 ```
 
-#### Running Spark sample locally
+### Running Spark sample locally
 ```bash
 #build jar file
 ./gradlew clean build
