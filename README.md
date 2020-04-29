@@ -1,7 +1,7 @@
 # Hadoop
 Code snippet of **_Hadoop: The Definitive Guide, 4th Edition_**
 
-## Requirements:
+## Requirements
 ``` bash
 * Java: 8
 * Hadoop: 3.2.1
@@ -9,7 +9,7 @@ Code snippet of **_Hadoop: The Definitive Guide, 4th Edition_**
 * Spark: 3.0.0-preview2
 ```
 
-## Steps
+## Running Steps
 ### Running m/r samples locally
 ```bash
 #build jar file
@@ -25,7 +25,7 @@ hadoop jar ./build/libs/ncdc-1.0.jar com.chnic.mapreduce.NCDCFileConverter ./src
 hadoop jar ./build/libs/ncdc-1.0.jar com.chnic.mapreduce.NCDCMaxTemperatureSortedByMapper './src/test/resources/190*.gz' ./out
 ```
 
-### Avro
+### Running Avro samples locally
 ```bash
 #generate java file from avsc 
 ./gradlew clean generateAvroJava
@@ -34,7 +34,7 @@ hadoop jar ./build/libs/ncdc-1.0.jar com.chnic.mapreduce.NCDCMaxTemperatureSorte
 ./gradlew clean test --tests com.chnic.avro.*
 ```
 
-### Running Avro m/r sample locally
+### Running Avro m/r samples locally
 ```bash
 #build jar file
 ./gradlew clean build
@@ -52,12 +52,12 @@ export HADOOP_CLASSPATH=`echo ${LIBJARS} | sed s/,/:/g`
 hadoop jar ./build/libs/ncdc-1.0.jar com.chnic.mapreduce.NCDCAvroMaxTemperature -libjars ${LIBJARS} './src/test/resources/190*.gz' ./out
 ```
 
-### Running Parquet sample locally
+### Running Parquet samples locally
 ```bash
 ./gradlew clean test --tests com.chnic.parquet.*
 ```
 
-### Running Spark sample locally
+### Running Spark samples locally
 ```bash
 #build jar file
 ./gradlew clean build
