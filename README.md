@@ -1,6 +1,15 @@
-## Hadoop
+# Hadoop
 Code snippet of **_Hadoop: The Definitive Guide, 4th Edition_**
 
+## Requirements:
+``` bash
+* Java: 8
+* Hadoop: 3.2.1
+* Hive 3.1.2
+* Spark: 3.0.0-preview2
+```
+
+## Steps
 ### Running m/r samples locally
 ```bash
 #build jar file
