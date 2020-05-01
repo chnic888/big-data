@@ -66,3 +66,27 @@ hadoop jar ./build/libs/ncdc-1.0.jar com.chnic.mapreduce.NCDCAvroMaxTemperature 
 spark-submit --class com.chnic.spark.NCDCMaxTemperature --master local ./build/libs/ncdc-1.0.jar ./src/test/resources/1901 ./out
 ```
 
+### Running Spark SQL sample locally
+- Schema
+```
+root  
+ |-- id: integer (nullable = true)  
+ |-- first_name: string (nullable = true)  
+ |-- title: string (nullable = true)  
+ |-- state: string (nullable = true)  
+ |-- laptop: string (nullable = true)  
+ |-- active: boolean (nullable = true)  
+```
+- Table Name  
+```
+employee
+```
+
+- Command
+```bash
+#build jar file
+./gradlew clean build
+
+#run spark sql
+spark-submit --class com.chnic.spark.EmployeeSQLQuery --master local[*] ./build/libs/ncdc-1.0.jar ./src/test/resources/employees.csv 'select * from employee where id = 10'
+```
