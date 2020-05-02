@@ -89,4 +89,5 @@ employee
 
 #run spark sql
 spark-submit --class com.chnic.spark.EmployeeSQLQuery --master local[*] ./build/libs/ncdc-1.0.jar ./src/test/resources/employees.csv 'select * from employee where id = 10'
+spark-submit --class com.chnic.spark.EmployeeSQLQuery --master local[*] ./build/libs/ncdc-1.0.jar ./src/test/resources/employees.csv 'select title, count(*) as count from employee group by title'
 ```
