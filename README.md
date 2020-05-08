@@ -19,10 +19,10 @@ Hadoop/Hive/Spark Code Samples
 export HADOOP_CONF_DIR=./src/main/resources/local
 
 #run m/r
-hadoop jar ./build/libs/ncdc-1.0.jar com.chnic.mapreduce.NCDCMaxTemperature './src/test/resources/190*.gz' ./out
-hadoop jar ./build/libs/ncdc-1.0.jar com.chnic.mapreduce.NCDCMaxTemperatureCompression ./src/test/resources/1901 ./out
-hadoop jar ./build/libs/ncdc-1.0.jar com.chnic.mapreduce.NCDCFileConverter ./src/test/resources/1901 ./out
-hadoop jar ./build/libs/ncdc-1.0.jar com.chnic.mapreduce.NCDCMaxTemperatureSortedByMapper './src/test/resources/190*.gz' ./out
+hadoop jar ./build/libs/big-data-1.0.jar com.chnic.mapreduce.NCDCMaxTemperature './src/test/resources/190*.gz' ./out
+hadoop jar ./build/libs/big-data-1.0.jar com.chnic.mapreduce.NCDCMaxTemperatureCompression ./src/test/resources/1901 ./out
+hadoop jar ./build/libs/big-data-1.0.jar com.chnic.mapreduce.NCDCFileConverter ./src/test/resources/1901 ./out
+hadoop jar ./build/libs/big-data-1.0.jar com.chnic.mapreduce.NCDCMaxTemperatureSortedByMapper './src/test/resources/190*.gz' ./out
 ```
 
 ### Running Avro samples locally
@@ -49,7 +49,7 @@ export LIBJARS=./build/libs/avro-mapred-1.7.7-hadoop2.jar
 export HADOOP_CLASSPATH=`echo ${LIBJARS} | sed s/,/:/g`
 
 #run m/r
-hadoop jar ./build/libs/ncdc-1.0.jar com.chnic.mapreduce.NCDCAvroMaxTemperature -libjars ${LIBJARS} './src/test/resources/190*.gz' ./out
+hadoop jar ./build/libs/big-data-1.0.jar com.chnic.mapreduce.NCDCAvroMaxTemperature -libjars ${LIBJARS} './src/test/resources/190*.gz' ./out
 ```
 
 ### Running Parquet samples locally
@@ -67,22 +67,6 @@ spark-submit --class com.chnic.spark.NCDCMaxTemperature --master local ./build/l
 ```
 
 ### Running Spark SQL sample locally
-- Schema
-```
-root  
- |-- id: integer (nullable = true)  
- |-- first_name: string (nullable = true)  
- |-- title: string (nullable = true)  
- |-- state: string (nullable = true)  
- |-- laptop: string (nullable = true)  
- |-- active: boolean (nullable = true)  
-```
-- Table Name  
-```
-employee
-```
-
-- Command
 ```bash
 #build jar file
 ./gradlew clean build
