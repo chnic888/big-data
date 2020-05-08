@@ -1,5 +1,5 @@
-# Hadoop
-Code snippet of **_Hadoop: The Definitive Guide, 4th Edition_**
+# Big Data
+Hadoop/Hive/Spark Code Samples 
 
 ## Requirements
 ``` bash
