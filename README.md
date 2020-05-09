@@ -75,6 +75,6 @@ spark-submit --class com.chnic.spark.FlightDataStructuredQuery --master local[*]
 ./gradlew clean build
 
 #run spark sql samples
-spark-submit --class com.chnic.spark.EmployeeSQLQuery --master local[*] ./build/libs/big-data-1.0.jar ./src/test/resources/employees.csv 'select * from employee where id = 10'
-spark-submit --class com.chnic.spark.EmployeeSQLQuery --master local[*] ./build/libs/big-data-1.0.jar ./src/test/resources/employees.csv 'select title, count(*) as count from employee group by title'
+spark-submit --class com.chnic.spark.EmployeeSQLQuery --master local[*] ./build/libs/big-data-1.0.jar ./src/test/resources/employees.csv 'select * from employee where id = 10' ./out
+spark-submit --class com.chnic.spark.EmployeeSQLQuery --master local[*] ./build/libs/big-data-1.0.jar ./src/test/resources/employees.csv 'select title, count(*) as count from employee group by title' ./out
 ```

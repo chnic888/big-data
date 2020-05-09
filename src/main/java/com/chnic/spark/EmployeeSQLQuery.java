@@ -18,11 +18,11 @@ public class EmployeeSQLQuery {
         });
 
         Dataset<Row> dataset = sqlContext.read().option("header", true).schema(schema).csv(args[0]).cache();
-        dataset.show();
-        dataset.printSchema();
         dataset.createTempView("employee");
 
-        Dataset<Row> result = dataset.sqlContext().sql(args[1]);
-        result.show();
+        dataset.show();
+        dataset.printSchema();
+
+        dataset.sqlContext().sql(args[1]).write().mode(SaveMode.Overwrite).csv(args[2]);
     }
 }
