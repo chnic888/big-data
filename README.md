@@ -66,7 +66,7 @@ hadoop jar ./build/libs/big-data-1.0.jar com.chnic.mapreduce.NCDCAvroMaxTemperat
 spark-submit --class com.chnic.spark.NCDCMaxTemperature --master local ./build/libs/big-data-1.0.jar ./src/test/resources/1901 ./out
 
 #run spark Structured API sample
-spark-submit --class com.chnic.spark.FlightDataStructuredQuery --master local[*] ./build/libs/big-data-1.0.jar ./src/test/resources/2015-summary.json
+spark-submit --packages org.apache.spark:spark-avro_2.12:3.0.0-preview2 --class com.chnic.spark.FlightDataStructuredQuery --master local[*] ./build/libs/big-data-1.0.jar ./src/test/resources/2015-summary.json ./out
 ```
 
 ### Running Spark SQL sample locally

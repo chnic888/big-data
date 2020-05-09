@@ -1,9 +1,6 @@
 package com.chnic.spark;
 
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SQLContext;
-import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.*;
 
 import static org.apache.spark.sql.functions.col;
 import static org.apache.spark.sql.functions.sum;
@@ -18,9 +15,15 @@ public class FlightDataStructuredQuery {
         dataset.printSchema();
         dataset.show();
 
-        dataset.selectExpr("*").where(col("DEST_COUNTRY_NAME").equalTo("United States")).show();
-        dataset.groupBy(col("DEST_COUNTRY_NAME")).agg(sum(col("count")).as("DEST_COUNTRY_COUNT")).show();
+        String basePath = args[1];
+        dataset.selectExpr("*").where(col("DEST_COUNTRY_NAME").equalTo("United States"))
+                .write().mode(SaveMode.Overwrite).parquet(basePath + "/parquet");
+
         dataset.groupBy(col("DEST_COUNTRY_NAME")).agg(sum(col("count")).as("DEST_COUNTRY_COUNT"))
-                .where("DEST_COUNTRY_COUNT > 100").orderBy(col("DEST_COUNTRY_COUNT")).show(100);
+                .write().mode(SaveMode.Overwrite).format("avro").save(basePath + "/avro");
+
+        dataset.groupBy(col("DEST_COUNTRY_NAME")).agg(sum(col("count")).as("DEST_COUNTRY_COUNT"))
+                .where("DEST_COUNTRY_COUNT > 100").orderBy(col("DEST_COUNTRY_COUNT"))
+                .write().mode(SaveMode.Overwrite).orc(basePath + "/orc");
     }
 }
