@@ -62,8 +62,11 @@ hadoop jar ./build/libs/big-data-1.0.jar com.chnic.mapreduce.NCDCAvroMaxTemperat
 #build jar file
 ./gradlew clean build
 
-#run spark
-spark-submit --class com.chnic.spark.NCDCMaxTemperature --master local ./build/libs/ncdc-1.0.jar ./src/test/resources/1901 ./out
+#run spark RDD API sample
+spark-submit --class com.chnic.spark.NCDCMaxTemperature --master local ./build/libs/big-data-1.0.jar ./src/test/resources/1901 ./out
+
+#run spark Structured API sample
+spark-submit --class com.chnic.spark.FlightDataStructuredQuery --master local[*] ./build/libs/big-data-1.0.jar ./src/test/resources/2015-summary.json
 ```
 
 ### Running Spark SQL sample locally
@@ -71,7 +74,7 @@ spark-submit --class com.chnic.spark.NCDCMaxTemperature --master local ./build/l
 #build jar file
 ./gradlew clean build
 
-#run spark sql
-spark-submit --class com.chnic.spark.EmployeeSQLQuery --master local[*] ./build/libs/ncdc-1.0.jar ./src/test/resources/employees.csv 'select * from employee where id = 10'
-spark-submit --class com.chnic.spark.EmployeeSQLQuery --master local[*] ./build/libs/ncdc-1.0.jar ./src/test/resources/employees.csv 'select title, count(*) as count from employee group by title'
+#run spark sql samples
+spark-submit --class com.chnic.spark.EmployeeSQLQuery --master local[*] ./build/libs/big-data-1.0.jar ./src/test/resources/employees.csv 'select * from employee where id = 10'
+spark-submit --class com.chnic.spark.EmployeeSQLQuery --master local[*] ./build/libs/big-data-1.0.jar ./src/test/resources/employees.csv 'select title, count(*) as count from employee group by title'
 ```
