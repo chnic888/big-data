@@ -28,7 +28,7 @@ public class FlightDataStructuredQuery {
         Column expr1 = col("ORIGIN_COUNTRY_NAME").equalTo("United States").and(col("DEST_COUNTRY_NAME").equalTo("China"));
         Column expr2 = col("ORIGIN_COUNTRY_NAME").equalTo("China").and(col("DEST_COUNTRY_NAME").equalTo("United States"));
         dataset.select(col("ORIGIN_COUNTRY_NAME"), col("DEST_COUNTRY_NAME"), col("count"))
-                .where(expr1.or(expr2)).write().mode(SaveMode.Overwrite).csv(basePath + "/cvs");
+                .where(expr1.or(expr2)).write().mode(SaveMode.Overwrite).option("header","true").csv(basePath + "/cvs");
 
         dataset.where(expr1.or(expr2)).withColumn("COUNTRIES", lit("USA2CHN"))
                 .groupBy(col("COUNTRIES")).agg(sum(col("count")).as("SUM"))

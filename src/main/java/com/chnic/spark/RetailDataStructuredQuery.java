@@ -1,10 +1,10 @@
 package com.chnic.spark;
 
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SQLContext;
-import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.*;
+
+import static org.apache.spark.sql.functions.coalesce;
+import static org.apache.spark.sql.functions.col;
 
 public class RetailDataStructuredQuery {
 
@@ -28,5 +28,13 @@ public class RetailDataStructuredQuery {
 
         dataset.printSchema();
         dataset.show();
+
+        String basePath = args[1];
+        dataset.select(coalesce(col("CustomerID"), col("Description"))).write().mode(SaveMode.Overwrite).csv(basePath + "out/coalesce");
+
+        dataset.na().drop("any").write().mode(SaveMode.Overwrite).csv(basePath + "out/drop-any");
+        dataset.na().drop("all").write().mode(SaveMode.Overwrite).csv(basePath + "out/drop-all");
+
+
     }
 }
