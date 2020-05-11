@@ -67,6 +67,7 @@ spark-submit --class com.chnic.spark.NCDCMaxTemperature --master local ./build/l
 
 #run spark Structured API sample
 spark-submit --packages org.apache.spark:spark-avro_2.12:3.0.0-preview2 --class com.chnic.spark.FlightDataStructuredQuery --master local[*] ./build/libs/big-data-1.0.jar ./src/test/resources/2015-summary.json ./out
+spark-submit --class com.chnic.spark.RetailDataStructuredQuery --master local[*] ./build/libs/big-data-1.0.jar ./src/test/resources/2011-12-09.csv ./out
 ```
 
 ### Running Spark SQL sample locally

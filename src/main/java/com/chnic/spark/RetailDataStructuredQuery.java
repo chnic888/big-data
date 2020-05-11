@@ -1,10 +1,11 @@
 package com.chnic.spark;
 
 import org.apache.spark.sql.*;
+import org.apache.spark.sql.api.java.UDF1;
+import org.apache.spark.sql.expressions.UserDefinedFunction;
 import org.apache.spark.sql.types.*;
 
-import static org.apache.spark.sql.functions.coalesce;
-import static org.apache.spark.sql.functions.col;
+import static org.apache.spark.sql.functions.*;
 
 public class RetailDataStructuredQuery {
 
@@ -13,7 +14,7 @@ public class RetailDataStructuredQuery {
         SQLContext sqlContext = new SQLContext(sparkSession);
 
         StructType schema = new StructType(new StructField[]{
-                StructField.apply("InvoiceNo", LongType$.MODULE$, false, Metadata.empty()),
+                StructField.apply("InvoiceNo", StringType$.MODULE$, false, Metadata.empty()),
                 StructField.apply("StockCode", IntegerType$.MODULE$, false, Metadata.empty()),
                 StructField.apply("Description", StringType$.MODULE$, false, Metadata.empty()),
                 StructField.apply("Quantity", IntegerType$.MODULE$, true, Metadata.empty()),
@@ -30,11 +31,36 @@ public class RetailDataStructuredQuery {
         dataset.show();
 
         String basePath = args[1];
-        dataset.select(coalesce(col("CustomerID"), col("Description"))).write().mode(SaveMode.Overwrite).csv(basePath + "out/coalesce");
+        dataset.select(coalesce(col("CustomerID"), col("Description"))).write().mode(SaveMode.Overwrite).option("header", "true").csv(basePath + "/coalesce");
 
-        dataset.na().drop("any").write().mode(SaveMode.Overwrite).csv(basePath + "out/drop-any");
-        dataset.na().drop("all").write().mode(SaveMode.Overwrite).csv(basePath + "out/drop-all");
+        dataset.na().drop("any").write().mode(SaveMode.Overwrite).option("header", "true").csv(basePath + "/drop-any");
+        dataset.na().drop("all").write().mode(SaveMode.Overwrite).option("header", "true").csv(basePath + "/drop-all");
 
+        Dataset<Row> invoiceDataSet = dataset.select(struct(col("InvoiceNo"), col("InvoiceDate")).as("InvoiceInfo"), col("Quantity"));
+        invoiceDataSet.select(col("InvoiceInfo").getField("InvoiceNo"), col("InvoiceInfo").getField("InvoiceDate"), col("Quantity"))
+                .write().mode(SaveMode.Overwrite).option("header", "true").csv(basePath + "/struct");
 
+        dataset.select(split(col("Description"), " ").as("DescriptionArray")).selectExpr("DescriptionArray[0]")
+                .write().mode(SaveMode.Overwrite).option("header", "true").csv(basePath + "/array");
+
+        dataset.select(map(col("InvoiceNo"), col("InvoiceDate")).as("InvoiceMap")).selectExpr("InvoiceMap['581578']").na().drop("all")
+                .write().mode(SaveMode.Overwrite).option("header", "true").csv(basePath + "/map");
+
+        dataset.select(struct(struct(col("InvoiceNo"), col("InvoiceDate")).as("InvoiceInfo"), split(col("Description"), " ").as("Descriptions"), col("CustomerID"), col("Country")).as("RetailData"))
+                .select(to_json(col("RetailData")).as("RetailDataJson"))
+                .select(get_json_object(col("RetailDataJson"), "$.CustomerID").as("CusID"),
+                        get_json_object(col("RetailDataJson"), "$.Descriptions[0]").as("Des"),
+                        json_tuple(col("RetailDataJson"), "Country"))
+                .na().drop("any")
+                .where("Country = 'Norway'")
+                .write().mode(SaveMode.Overwrite).json(basePath + "/json");
+
+        UserDefinedFunction udfLowerCase = udf(
+                (UDF1<String, String>) String::toLowerCase, StringType$.MODULE$
+        );
+        dataset.select(udfLowerCase.apply(col("Description"))).write().mode(SaveMode.Overwrite).option("header", "true").csv(basePath + "/udf/func");
+
+        sqlContext.udf().register("udfLowerCaseExpr", (UDF1<String, String>) String::toLowerCase, StringType$.MODULE$);
+        dataset.selectExpr("udfLowerCaseExpr(Description)").write().mode(SaveMode.Overwrite).option("header", "true").csv(basePath + "/udf/expr");
     }
 }
