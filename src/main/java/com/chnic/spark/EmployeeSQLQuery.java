@@ -20,8 +20,8 @@ public class EmployeeSQLQuery {
         Dataset<Row> dataset = sqlContext.read().option("header", true).schema(schema).csv(args[0]).cache();
         dataset.createTempView("employee");
 
-        dataset.show();
         dataset.printSchema();
+        dataset.show();
 
         dataset.sqlContext().sql(args[1]).write().mode(SaveMode.Overwrite).csv(args[2]);
     }
