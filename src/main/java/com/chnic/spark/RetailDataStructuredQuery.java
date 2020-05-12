@@ -58,9 +58,13 @@ public class RetailDataStructuredQuery {
         UserDefinedFunction udfLowerCase = udf(
                 (UDF1<String, String>) String::toLowerCase, StringType$.MODULE$
         );
-        dataset.select(udfLowerCase.apply(col("Description"))).write().mode(SaveMode.Overwrite).option("header", "true").csv(basePath + "/udf/func");
+        dataset.select(col("Description")).na().drop("any")
+                .select(udfLowerCase.apply(col("Description")))
+                .write().mode(SaveMode.Overwrite).option("header", "true").csv(basePath + "/udf/func");
 
         sqlContext.udf().register("udfLowerCaseExpr", (UDF1<String, String>) String::toLowerCase, StringType$.MODULE$);
-        dataset.selectExpr("udfLowerCaseExpr(Description)").write().mode(SaveMode.Overwrite).option("header", "true").csv(basePath + "/udf/expr");
+        dataset.select(col("Description")).na().drop("any")
+                .selectExpr("udfLowerCaseExpr(Description)")
+                .write().mode(SaveMode.Overwrite).option("header", "true").csv(basePath + "/udf/expr");
     }
 }
