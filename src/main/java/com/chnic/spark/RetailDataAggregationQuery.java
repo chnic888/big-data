@@ -1,9 +1,6 @@
 package com.chnic.spark;
 
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SQLContext;
-import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.*;
 import org.apache.spark.sql.expressions.Window;
 import org.apache.spark.sql.expressions.WindowSpec;
 
@@ -21,6 +18,7 @@ public class RetailDataAggregationQuery {
         dataset.printSchema();
         dataset.show();
 
+        String basePath = args[1];
         WindowSpec windowSpec = Window.partitionBy(col("CustomerID"), col("Date")).orderBy(col("Quantity").desc()).rowsBetween(Window.unboundedPreceding(), Window.currentRow());
         dataset.withColumn("Date", to_date(col("InvoiceDate"), "yyyy-MM-dd"))
                 .where("CustomerID IS NOT NULL").orderBy(col("CustomerID"))
@@ -31,6 +29,6 @@ public class RetailDataAggregationQuery {
                         rank().over(windowSpec).as("QuantityRank"),
                         dense_rank().over(windowSpec).as("QuantityDenseRank"),
                         max(col("Quantity")).over(windowSpec).as("QuantityMax")
-                ).show();
+                ).write().mode(SaveMode.Overwrite).option("header", "true").csv(basePath + "/window");
     }
 }
