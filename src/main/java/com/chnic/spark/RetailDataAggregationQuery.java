@@ -30,5 +30,17 @@ public class RetailDataAggregationQuery {
                         dense_rank().over(windowSpec).as("QuantityDenseRank"),
                         max(col("Quantity")).over(windowSpec).as("QuantityMax")
                 ).write().mode(SaveMode.Overwrite).option("header", "true").csv(basePath + "/window");
+
+        dataset.na().drop().withColumn("Date", to_date(col("InvoiceDate"), "yyyy/mm/dd"))
+                .rollup(col("Date"), col("Country")).agg(sum(col("Quantity")).as("Quantity_Sum"))
+                .select(col("Date"), col("Country"), col("Quantity_Sum"))
+                .orderBy(col("Date"))
+                .write().mode(SaveMode.Overwrite).option("header", "true").csv(basePath + "/rollup");
+
+        dataset.na().drop().withColumn("Date", to_date(col("InvoiceDate"), "yyyy/mm/dd"))
+                .cube(col("Date"), col("Country"), col("CustomerID")).agg(sum(col("Quantity")).as("Quantity_Sum"))
+                .select(col("Date"), col("Country"), col("CustomerID"), col("Quantity_Sum"))
+                .orderBy(col("Date"))
+                .write().mode(SaveMode.Overwrite).option("header", "true").csv(basePath + "/cube");
     }
 }
