@@ -1,3 +1,4 @@
 { "id": 0, "name": "Bill Chambers", "graduate_program": 0, "spark_status": [100] }
 { "id": 1, "name": "Matei Zaharia", "graduate_program": 1, "spark_status": [500, 250, 100] }
 { "id": 2, "name": "Michael Armbrust", "graduate_program": 1, "spark_status": [250, 100] }
+{ "id": 3, "name": "Bill Gates", "graduate_program": 3, "spark_status": [500, 250, 100] }
