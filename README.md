@@ -70,6 +70,9 @@ spark-submit --packages org.apache.spark:spark-avro_2.12:3.0.0-preview2 --class 
 spark-submit --class com.chnic.spark.RetailDataStructuredQuery --master local[*] ./build/libs/big-data-1.0.jar ./src/test/resources/2011-12-09.csv ./out
 spark-submit --class com.chnic.spark.RetailDataAggregationQuery --master local[*] ./build/libs/big-data-1.0.jar './src/test/resources/2011-12-*.csv' ./out
 spark-submit --class com.chnic.spark.PersonJoinQuery --master local[*] ./build/libs/big-data-1.0.jar ./src/test/resources/ ./out
+
+#run spark Structured API sample to read/write jdbc
+spark-submit --class com.chnic.spark.EmployeeDBQuery --master local[*] --driver-class-path ./build/libs/mysql-connector-java-8.0.20.jar --jars ./build/libs/mysql-connector-java-8.0.20.jar ./build/libs/big-data-1.0.jar 'jdbc:mysql://localhost:3306/test' root root
 ```
 
 ### Running Spark SQL sample locally

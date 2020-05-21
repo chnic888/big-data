@@ -42,7 +42,7 @@ dependencies {
     implementation 'org.apache.spark:spark-hive_2.12:3.0.0-preview2'
     implementation 'org.apache.spark:spark-avro_2.12:3.0.0-preview2'
 
-    runtimeOnly 'mysql:mysql-connector-java:8.0.20'
+    userDependencies 'mysql:mysql-connector-java:8.0.20'
 
     userDependencies 'org.apache.avro:avro-mapred:1.7.7:hadoop2'
     userDependencies 'org.apache.parquet:parquet-avro:1.11.0'
