@@ -83,4 +83,5 @@ spark-submit --class com.chnic.spark.EmployeeDBQuery --master local[*] --driver-
 #run spark sql samples
 spark-submit --class com.chnic.spark.EmployeeSQLQuery --master local[*] ./build/libs/big-data-1.0.jar ./src/test/resources/employees.csv 'select * from employee where id = 10' ./out
 spark-submit --class com.chnic.spark.EmployeeSQLQuery --master local[*] ./build/libs/big-data-1.0.jar ./src/test/resources/employees.csv 'select title, count(*) as count from employee group by title' ./out
+spark-submit --class com.chnic.spark.FlightDataSQLQuery --master local[*] ./build/libs/big-data-1.0.jar ./src/test/resources/2015-summary.json
 ```
