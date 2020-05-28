@@ -85,3 +85,12 @@ spark-submit --class com.chnic.spark.EmployeeSQLQuery --master local[*] ./build/
 spark-submit --class com.chnic.spark.EmployeeSQLQuery --master local[*] ./build/libs/big-data-1.0.jar ./src/test/resources/employees.csv 'select title, count(*) as count from employee group by title' ./out
 spark-submit --class com.chnic.spark.FlightDataSQLQuery --master local[*] ./build/libs/big-data-1.0.jar ./src/test/resources/2015-summary.json
 ```
+
+### Running Spark Streaming sample locally
+```bash
+#build jar file
+./gradlew clean build
+
+#run spark streaming samples
+spark-submit --class com.chnic.spark.SparkStreamingQuery --master local[*] ./build/libs/big-data-1.0.jar ./src/test/resources/streaming-data/
+```
