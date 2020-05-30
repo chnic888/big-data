@@ -16,11 +16,7 @@ import static org.apache.spark.sql.functions.expr;
 public class SparkStreamingQuery {
 
     public static void main(String[] args) throws TimeoutException, StreamingQueryException {
-        args = new String[]{
-                "/home/nick/code/big-data/src/test/resources/streaming-data/"
-        };
-
-        SparkSession spark = SparkSession.builder().appName("Spark streaming demo").master("local[*]").getOrCreate();
+        SparkSession spark = SparkSession.builder().appName("Spark streaming demo").getOrCreate();
         spark.sparkContext().setLogLevel("error");
 
         StructType schema = new StructType(new StructField[]{
@@ -58,7 +54,7 @@ public class SparkStreamingQuery {
 //                .awaitTermination();
 
         streaming.cube(col("gt"), col("Model")).avg("x", "y", "z")
-                .writeStream().trigger(Trigger.ProcessingTime("2 seconds")).queryName("device_counts").format("console").outputMode("complete")
+                .writeStream().trigger(Trigger.ProcessingTime("5 seconds")).queryName("device_counts").format("console").outputMode("complete")
                 .start()
                 .awaitTermination();
 
