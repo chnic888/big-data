@@ -11,7 +11,6 @@ public class RetailDataStructuredQuery {
 
     public static void main(String[] args) {
         SparkSession sparkSession = SparkSession.builder().appName("Retail Data Query by Spark DataSet API").getOrCreate();
-        SQLContext sqlContext = new SQLContext(sparkSession);
 
         StructType schema = new StructType(new StructField[]{
                 StructField.apply("InvoiceNo", StringType$.MODULE$, false, Metadata.empty()),
@@ -24,7 +23,7 @@ public class RetailDataStructuredQuery {
                 StructField.apply("Country", StringType$.MODULE$, false, Metadata.empty()),
         });
 
-        Dataset<Row> dataset = sqlContext.read().option("header", true).option("timestampFormat", "yyyy-MM-dd HH:mm:ss")
+        Dataset<Row> dataset = sparkSession.read().option("header", true).option("timestampFormat", "yyyy-MM-dd HH:mm:ss")
                 .schema(schema).csv(args[0]).cache();
 
         dataset.printSchema();
@@ -62,7 +61,7 @@ public class RetailDataStructuredQuery {
                 .select(udfLowerCase.apply(col("Description")))
                 .write().mode(SaveMode.Overwrite).option("header", "true").csv(basePath + "/udf/func");
 
-        sqlContext.udf().register("udfLowerCaseExpr", (UDF1<String, String>) String::toLowerCase, StringType$.MODULE$);
+        sparkSession.udf().register("udfLowerCaseExpr", (UDF1<String, String>) String::toLowerCase, StringType$.MODULE$);
         dataset.select(col("Description")).na().drop("any")
                 .selectExpr("udfLowerCaseExpr(Description)")
                 .write().mode(SaveMode.Overwrite).option("header", "true").csv(basePath + "/udf/expr");

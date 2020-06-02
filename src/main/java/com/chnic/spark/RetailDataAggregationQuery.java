@@ -10,9 +10,8 @@ public class RetailDataAggregationQuery {
 
     public static void main(String[] args) {
         SparkSession sparkSession = SparkSession.builder().appName("Retail Data Aggregation Query by Spark DataSet API").getOrCreate();
-        SQLContext sqlContext = new SQLContext(sparkSession);
 
-        Dataset<Row> dataset = sqlContext.read().option("header", true).option("timestampFormat", "yyyy-MM-dd HH:mm:ss")
+        Dataset<Row> dataset = sparkSession.read().option("header", true).option("timestampFormat", "yyyy-MM-dd HH:mm:ss")
                 .option("inferSchema", "true").csv(args[0]).cache();
 
         dataset.printSchema();

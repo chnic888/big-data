@@ -8,9 +8,8 @@ public class FlightDataStructuredQuery {
 
     public static void main(String[] args) {
         SparkSession sparkSession = SparkSession.builder().appName("Flight Data Query by Spark DataSet API").getOrCreate();
-        SQLContext sqlContext = new SQLContext(sparkSession);
 
-        Dataset<Row> dataset = sqlContext.read().option("inferSchema", "true").json(args[0]).cache();
+        Dataset<Row> dataset = sparkSession.read().option("inferSchema", "true").json(args[0]).cache();
         dataset.printSchema();
         dataset.show();
 

@@ -8,12 +8,11 @@ public class PersonJoinQuery {
 
     public static void main(String[] args) {
         SparkSession sparkSession = SparkSession.builder().appName("Person Join by Spark SQL").getOrCreate();
-        SQLContext sqlContext = new SQLContext(sparkSession);
 
         String sourceBasePath = args[0];
-        Dataset<Row> personDataSet = sqlContext.read().option("inferSchema", "true").json(sourceBasePath + "/person.json").cache();
-        Dataset<Row> graduateProgramDataSet = sqlContext.read().option("inferSchema", "true").json(sourceBasePath + "/graduate-program.json").cache();
-        Dataset<Row> sparkStatusDataSets = sqlContext.read().option("inferSchema", "true").json(sourceBasePath + "/spark-status.json").cache();
+        Dataset<Row> personDataSet = sparkSession.read().option("inferSchema", "true").json(sourceBasePath + "/person.json").cache();
+        Dataset<Row> graduateProgramDataSet = sparkSession.read().option("inferSchema", "true").json(sourceBasePath + "/graduate-program.json").cache();
+        Dataset<Row> sparkStatusDataSets = sparkSession.read().option("inferSchema", "true").json(sourceBasePath + "/spark-status.json").cache();
 
         personDataSet.printSchema();
         graduateProgramDataSet.printSchema();
